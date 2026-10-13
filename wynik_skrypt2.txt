@@ -1,0 +1,293 @@
+
+================================================================================
+POBIERANIE INDEKSÓW SEKTOROWYCH GPW
+================================================================================
+
+Pobieranie: BANKI (wig_banki)
+  obserwacje: 2644
+  od: 2016-01-04
+  do: 2026-07-31
+
+Pobieranie: BUDOWNICTWO (wig_budow)
+  obserwacje: 2644
+  od: 2016-01-04
+  do: 2026-07-31
+
+Pobieranie: SPOZYWCZY (wig_spozyw)
+  obserwacje: 2644
+  od: 2016-01-04
+  do: 2026-07-31
+
+Pobieranie: ENERGIA (wig_energ)
+  obserwacje: 2644
+  od: 2016-01-04
+  do: 2026-07-31
+
+Pobieranie: LEKI (wig_leki)
+  obserwacje: 2393
+  od: 2017-01-02
+  do: 2026-07-31
+
+Braki danych w cenach:
+date             0
+BANKI            0
+BUDOWNICTWO      0
+SPOZYWCZY        0
+ENERGIA          0
+LEKI           251
+dtype: int64
+
+================================================================================
+DZIENNE LOGARYTMICZNE STOPY ZWROTU
+================================================================================
+
+Liczba miesięcznych obserwacji: 127
+
+================================================================================
+POBIERANIE PKB
+================================================================================
+  freq         unit s_adj na_item geo     time  value
+0    Q  CLV_PCH_PRE   SCA    B1GQ  PL  2015-Q1    1.7
+1    Q  CLV_PCH_PRE   SCA    B1GQ  PL  2015-Q2    0.5
+2    Q  CLV_PCH_PRE   SCA    B1GQ  PL  2015-Q3    1.3
+3    Q  CLV_PCH_PRE   SCA    B1GQ  PL  2015-Q4    0.8
+4    Q  CLV_PCH_PRE   SCA    B1GQ  PL  2016-Q1   -0.1
+
+================================================================================
+POBIERANIE INFLACJI HICP
+================================================================================
+  freq unit coicop geo     time  value
+0    M  I15   CP00  PL  2015-01   99.7
+1    M  I15   CP00  PL  2015-02   99.6
+2    M  I15   CP00  PL  2015-03   99.9
+3    M  I15   CP00  PL  2015-04  100.3
+4    M  I15   CP00  PL  2015-05  100.4
+
+================================================================================
+POBIERANIE STOPY BEZROBOCIA
+================================================================================
+  freq s_adj    age    unit sex geo     time  value
+0    M    SA  TOTAL  PC_ACT   T  PL  2015-01    8.4
+1    M    SA  TOTAL  PC_ACT   T  PL  2015-02    8.3
+2    M    SA  TOTAL  PC_ACT   T  PL  2015-03    8.1
+3    M    SA  TOTAL  PC_ACT   T  PL  2015-04    7.9
+4    M    SA  TOTAL  PC_ACT   T  PL  2015-05    7.7
+
+================================================================================
+ŁĄCZENIE DANYCH MAKROEKONOMICZNYCH
+================================================================================
+
+================================================================================
+ŁĄCZENIE DANYCH SEKTOROWYCH I MAKRO
+================================================================================
+
+Liczba obserwacji:
+127
+
+Braki:
+date              0
+BANKI             1
+BUDOWNICTWO       1
+SPOZYWCZY         1
+ENERGIA           1
+LEKI             13
+Inflation_YoY     0
+Unemployment      0
+GDP_growth        0
+dtype: int64
+
+Korelacje:
+         Sektor        Zmienna   Pearson  ...  Spearman  Spearman p-value    N
+0         BANKI     GDP_growth -0.051792  ... -0.044041          0.624369  126
+1         BANKI  Inflation_YoY  0.000831  ...  0.028941          0.747685  126
+2         BANKI   Unemployment  0.040428  ...  0.099216          0.269016  126
+3   BUDOWNICTWO     GDP_growth -0.269155  ... -0.232203          0.008887  126
+4   BUDOWNICTWO  Inflation_YoY  0.124106  ...  0.150679          0.092155  126
+5   BUDOWNICTWO   Unemployment -0.082786  ... -0.088530          0.324241  126
+6     SPOZYWCZY     GDP_growth -0.113245  ... -0.025964          0.772896  126
+7     SPOZYWCZY  Inflation_YoY -0.139655  ... -0.053052          0.555197  126
+8     SPOZYWCZY   Unemployment  0.109154  ...  0.063214          0.481925  126
+9       ENERGIA     GDP_growth -0.224321  ... -0.119826          0.181401  126
+10      ENERGIA  Inflation_YoY -0.000831  ...  0.086274          0.336769  126
+11      ENERGIA   Unemployment -0.023791  ... -0.033019          0.713587  126
+12         LEKI     GDP_growth -0.093639  ...  0.003847          0.967594  114
+13         LEKI  Inflation_YoY -0.076926  ... -0.145462          0.122536  114
+14         LEKI   Unemployment  0.094052  ...  0.122727          0.193312  114
+
+[15 rows x 7 columns]
+
+================================================================================
+FAZY CYKLU KONIUNKTURALNEGO
+================================================================================
+      date  GDP_growth        phase
+2015-01-01         1.7    Ekspansja
+2015-04-01         0.5 Spowolnienie
+2015-07-01         1.3    Ekspansja
+2015-10-01         0.8 Spowolnienie
+2016-01-01        -0.1       Spadek
+2016-04-01         1.4    Ożywienie
+2016-07-01         0.6 Spowolnienie
+2016-10-01         2.0    Ekspansja
+2017-01-01         1.1 Spowolnienie
+2017-04-01         1.0 Spowolnienie
+2017-07-01         1.5    Ekspansja
+2017-10-01         1.4 Spowolnienie
+2018-01-01         2.0    Ekspansja
+2018-04-01         1.5 Spowolnienie
+2018-07-01         1.3 Spowolnienie
+2018-10-01         0.9 Spowolnienie
+2019-01-01         1.5    Ekspansja
+2019-04-01         0.9 Spowolnienie
+2019-07-01         0.8 Spowolnienie
+2019-10-01         0.8    Ekspansja
+2020-01-01         0.5 Spowolnienie
+2020-04-01        -9.0       Spadek
+2020-07-01         6.6    Ożywienie
+2020-10-01         0.1 Spowolnienie
+2021-01-01         2.4    Ekspansja
+2021-04-01         2.5    Ekspansja
+2021-07-01         2.0 Spowolnienie
+2021-10-01         2.0    Ekspansja
+2022-01-01         3.4    Ekspansja
+2022-04-01        -1.2       Spadek
+2022-07-01         0.6    Ożywienie
+2022-10-01        -1.6       Spadek
+2023-01-01         0.9    Ożywienie
+2023-04-01        -0.6       Spadek
+2023-07-01         1.9    Ożywienie
+2023-10-01        -0.3       Spadek
+2024-01-01         1.0    Ożywienie
+2024-04-01         1.6    Ekspansja
+2024-07-01        -0.1       Spadek
+2024-10-01         1.4    Ożywienie
+2025-01-01         0.8 Spowolnienie
+2025-04-01         0.7 Spowolnienie
+2025-07-01         1.1    Ekspansja
+2025-10-01         1.0 Spowolnienie
+2026-01-01         0.6 Spowolnienie
+2026-04-01         1.0    Ekspansja
+
+================================================================================
+ŚREDNIE STOPY ZWROTU W FAZACH CYKLU
+================================================================================
+                 BANKI  BUDOWNICTWO  SPOZYWCZY   ENERGIA      LEKI
+phase                                                             
+Recesja            NaN          NaN        NaN       NaN       NaN
+Spadek        0.030838     0.040738  -0.003255  0.045427  0.010799
+Ożywienie    -0.012937     0.004271   0.005889 -0.035733  0.007150
+Ekspansja     0.012774     0.007855  -0.004532  0.004307 -0.011602
+Spowolnienie  0.013104     0.002626   0.002824  0.000320 -0.014790
+
+Skumulowane stopy zwrotu:
+                 BANKI  BUDOWNICTWO  SPOZYWCZY   ENERGIA      LEKI
+Recesja            NaN          NaN        NaN       NaN       NaN
+Spadek        0.852930     1.258650  -0.063018  1.480686  0.214563
+Ożywienie    -0.237907     0.093837   0.131647 -0.527818  0.137339
+Ekspansja     0.583832     0.326819  -0.150548  0.167731 -0.318102
+Spowolnienie  0.875690     0.134336   0.145195  0.015498 -0.478357
+
+================================================================================
+RANKING SEKTORÓW
+================================================================================
+
+Recesja:
+BANKI         NaN
+BUDOWNICTWO   NaN
+SPOZYWCZY     NaN
+ENERGIA       NaN
+LEKI          NaN
+Name: Recesja, dtype: float64
+
+Spadek:
+ENERGIA        0.045427
+BUDOWNICTWO    0.040738
+BANKI          0.030838
+LEKI           0.010799
+SPOZYWCZY     -0.003255
+Name: Spadek, dtype: float64
+
+Ożywienie:
+LEKI           0.007150
+SPOZYWCZY      0.005889
+BUDOWNICTWO    0.004271
+BANKI         -0.012937
+ENERGIA       -0.035733
+Name: Ożywienie, dtype: float64
+
+Ekspansja:
+BANKI          0.012774
+BUDOWNICTWO    0.007855
+ENERGIA        0.004307
+SPOZYWCZY     -0.004532
+LEKI          -0.011602
+Name: Ekspansja, dtype: float64
+
+Spowolnienie:
+BANKI          0.013104
+SPOZYWCZY      0.002824
+BUDOWNICTWO    0.002626
+ENERGIA        0.000320
+LEKI          -0.014790
+Name: Spowolnienie, dtype: float64
+
+================================================================================
+KRUSKAL-WALLIS – SEKTORY A FAZY CYKLU
+================================================================================
+     Sektor        H  p-value                             Wniosek
+      BANKI 5.228602 0.155803 Brak podstaw do stwierdzenia różnic
+BUDOWNICTWO 4.410741 0.220392 Brak podstaw do stwierdzenia różnic
+  SPOZYWCZY 0.205198 0.976746 Brak podstaw do stwierdzenia różnic
+    ENERGIA 8.462835 0.037355                     Istotne różnice
+       LEKI 0.846243 0.838377 Brak podstaw do stwierdzenia różnic
+
+================================================================================
+PODSUMOWANIE ANALIZY
+================================================================================
+
+Korelacje z PKB:
+        Sektor   Pearson  Pearson p-value  Spearman  Spearman p-value    N
+0        BANKI -0.051792         0.564644 -0.044041          0.624369  126
+1  BUDOWNICTWO -0.269155         0.002307 -0.232203          0.008887  126
+2    SPOZYWCZY -0.113245         0.206746 -0.025964          0.772896  126
+3      ENERGIA -0.224321         0.011564 -0.119826          0.181401  126
+4         LEKI -0.093639         0.321710  0.003847          0.967594  114
+
+Kruskal-Wallis:
+        Sektor         H   p-value                              Wniosek
+0        BANKI  5.228602  0.155803  Brak podstaw do stwierdzenia różnic
+1  BUDOWNICTWO  4.410741  0.220392  Brak podstaw do stwierdzenia różnic
+2    SPOZYWCZY  0.205198  0.976746  Brak podstaw do stwierdzenia różnic
+3      ENERGIA  8.462835  0.037355                      Istotne różnice
+4         LEKI  0.846243  0.838377  Brak podstaw do stwierdzenia różnic
+
+Średnie stopy zwrotu:
+                 BANKI  BUDOWNICTWO  SPOZYWCZY   ENERGIA      LEKI
+phase                                                             
+Recesja            NaN          NaN        NaN       NaN       NaN
+Spadek        0.030838     0.040738  -0.003255  0.045427  0.010799
+Ożywienie    -0.012937     0.004271   0.005889 -0.035733  0.007150
+Ekspansja     0.012774     0.007855  -0.004532  0.004307 -0.011602
+Spowolnienie  0.013104     0.002626   0.002824  0.000320 -0.014790
+
+================================================================================
+EKSPORT DO EXCEL
+================================================================================
+
+================================================================================
+ANALIZA ZAKOŃCZONA
+================================================================================
+
+Plik Excel:
+wyniki_WIG_sektory/WIG_sektory_cykl_koniunkturalny_2016_2026.xlsx
+
+Wykresy zapisano w:
+wyniki_WIG_sektory
+
+Sektory:
+  BANKI                -> wig_banki
+  BUDOWNICTWO          -> wig_budow
+  SPOZYWCZY            -> wig_spozyw
+  ENERGIA              -> wig_energ
+  LEKI                 -> wig_leki
+
+Gotowe.
