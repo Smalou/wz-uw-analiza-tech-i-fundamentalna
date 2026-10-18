@@ -1,0 +1,355 @@
+======================================================================
+POBIERANIE DANYCH WIG20 ZE STOOQ
+======================================================================
+
+Kolumny pobranych danych:
+['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
+
+Pierwsze obserwacje:
+         Date     Open     High      Low    Close      Volume
+0  04/01/2016  1832.40  1832.40  1799.78  1804.42  14419432.0
+1  05/01/2016  1811.27  1819.82  1777.00  1792.01  21412543.0
+2  07/01/2016  1763.59  1766.85  1739.78  1745.46  35999729.0
+3  08/01/2016  1750.93  1758.19  1715.08  1725.14  27068293.0
+4  11/01/2016  1721.38  1727.15  1698.68  1703.78  25412325.0
+
+======================================================================
+CZYSZCZENIE DANYCH
+======================================================================
+Liczba obserwacji cen: 2644
+Pierwsza data:         2016-01-04
+Ostatnia data:         2026-07-31
+Brakujące daty:        0
+Brakujące ceny:        0
+Duplikaty dat:         0
+
+Statystyki cen zamknięcia:
+count    2644.000000
+mean     2235.079781
+std       454.531767
+min      1305.730000
+25%      1909.082500
+50%      2219.535000
+75%      2387.665000
+max      3920.260000
+Name: Close, dtype: float64
+
+Rozkład różnic pomiędzy kolejnymi datami:
+date_diff
+1.0    2050
+2.0      37
+3.0     508
+4.0      29
+5.0      17
+6.0       2
+Name: count, dtype: int64
+
+======================================================================
+OBLICZANIE LOGARYTMICZNYCH STÓP ZWROTU
+======================================================================
+Liczba stóp zwrotu: 2643
+
+======================================================================
+STATYSTYKI OPISOWE STÓP ZWROTU
+======================================================================
+Liczba obserwacji         2643.000000
+Średnia                      0.000294
+Mediana                      0.000169
+Odchylenie standardowe       0.013837
+Wariancja                    0.000191
+Minimum                     -0.142456
+Maksimum                     0.080995
+Kwartyl 1                   -0.007511
+Kwartyl 3                    0.007927
+Skośność                    -0.629405
+Kurtoza nadwyżkowa           7.741077
+Kurtoza                     10.741077
+
+======================================================================
+WYKRES GĘSTOŚCI ROZKŁADU
+======================================================================
+
+======================================================================
+TESTY LJUNGA-BOXA I BOXA-PIERCE'A
+======================================================================
+
+Wyniki:
+      lb_stat  lb_pvalue    bp_stat  bp_pvalue
+1    0.725141   0.394463   0.724319   0.394731
+5    7.073490   0.215232   7.059149   0.216278
+10  11.606675   0.312242  11.575201   0.314492
+20  23.263491   0.276043  23.149739   0.281502
+30  48.204610   0.018913  47.849306   0.020523
+
+Lag = 1
+Ljung-Box: stat=0.7251, p=0.394463
+Box-Pierce: stat=0.7243, p=0.394731
+Ljung-Box: NIE ODRZUCAMY H0 -> brak podstaw do stwierdzenia autokorelacji.
+
+Lag = 5
+Ljung-Box: stat=7.0735, p=0.215232
+Box-Pierce: stat=7.0591, p=0.216278
+Ljung-Box: NIE ODRZUCAMY H0 -> brak podstaw do stwierdzenia autokorelacji.
+
+Lag = 10
+Ljung-Box: stat=11.6067, p=0.312242
+Box-Pierce: stat=11.5752, p=0.314492
+Ljung-Box: NIE ODRZUCAMY H0 -> brak podstaw do stwierdzenia autokorelacji.
+
+Lag = 20
+Ljung-Box: stat=23.2635, p=0.276043
+Box-Pierce: stat=23.1497, p=0.281502
+Ljung-Box: NIE ODRZUCAMY H0 -> brak podstaw do stwierdzenia autokorelacji.
+
+Lag = 30
+Ljung-Box: stat=48.2046, p=0.018913
+Box-Pierce: stat=47.8493, p=0.020523
+Ljung-Box: ODRZUCAMY H0 -> występuje autokorelacja.
+
+======================================================================
+WYKRES ACF
+======================================================================
+
+======================================================================
+TEST SERII WALDA-WOLFOWITZA
+======================================================================
+Liczba obserwacji                      2643.000000
+Stopy dodatnie                         1336.000000
+Stopy ujemne                           1307.000000
+Liczba serii                           1354.000000
+Oczekiwana liczba serii                1322.340900
+Odchylenie standardowe liczby serii      25.697097
+Statystyka Z                              1.232011
+p-value                                   0.217945
+
+WYNIK: NIE ODRZUCAMY H0.
+Brak podstaw do stwierdzenia, że kolejność znaków stóp zwrotu jest nielosowa.
+
+======================================================================
+TEST KOŁMOGOROWA-SMIRNOWA
+======================================================================
+Statystyka KS    0.045372
+p-value          0.000036
+
+ODRZUCAMY H0.
+Rozkład stóp zwrotu różni się statystycznie od rozkładu normalnego.
+
+======================================================================
+WYKRES Q-Q
+======================================================================
+
+======================================================================
+TEST ADF – AUGMENTED DICKEY-FULLER
+======================================================================
+Statystyka ADF        -29.284914
+p-value                 0.000000
+Liczba opóźnień         2.000000
+Liczba obserwacji    2640.000000
+
+Wartości krytyczne:
+1%: -3.432829
+5%: -2.862635
+10%: -2.567353
+
+ODRZUCAMY H0.
+Stopy zwrotu są stacjonarne.
+
+======================================================================
+EFEKT DNIA TYGODNIA
+======================================================================
+              liczba   średnia   mediana  odchylenie_std   minimum  maksimum
+weekday_pl                                                                  
+Poniedziałek     521  0.001589  0.001623        0.013906 -0.081926  0.051777
+Wtorek           534  0.000992  0.001101        0.013547 -0.046005  0.063353
+Środa            535  0.000323  0.000076        0.012864 -0.060461  0.038374
+Czwartek         528 -0.000284 -0.000504        0.015104 -0.142456  0.048059
+Piątek           525 -0.001152 -0.001293        0.013570 -0.065768  0.080995
+
+ANOVA – dzień tygodnia
+F = 3.153886
+p-value = 0.013462
+
+Kruskal-Wallis – dzień tygodnia
+H = 19.120875
+p-value = 0.000744
+ODRZUCAMY H0 – dzień tygodnia ma statystycznie istotny związek ze stopami zwrotu.
+
+======================================================================
+EFEKT MIESIĄCA ROKU
+======================================================================
+             liczba   średnia   mediana  odchylenie_std   minimum  maksimum
+Styczeń         226  0.001015  0.000715        0.012568 -0.046564  0.032249
+Luty            222 -0.000785 -0.000474        0.016380 -0.115020  0.080995
+Marzec          240 -0.000406 -0.000216        0.020018 -0.142456  0.063353
+Kwiecień        217  0.001137  0.000368        0.014406 -0.065768  0.048313
+Maj             225 -0.000031 -0.000739        0.013354 -0.029565  0.042821
+Czerwiec        228  0.000211  0.000758        0.013036 -0.046396  0.036268
+Lipiec          243  0.001058  0.001727        0.010822 -0.034181  0.032087
+Sierpień        215 -0.000744 -0.000075        0.012339 -0.047348  0.033580
+Wrzesień        214 -0.001582 -0.001202        0.012755 -0.043895  0.040899
+Październik     221  0.000827  0.000468        0.012384 -0.047753  0.051777
+Listopad        199  0.001194  0.000076        0.013507 -0.039483  0.050217
+Grudzień        193  0.001820  0.001138        0.011181 -0.033189  0.034220
+
+ANOVA – miesiąc roku
+F = 1.175205
+p-value = 0.298743
+
+Kruskal-Wallis – miesiąc roku
+H = 12.544737
+p-value = 0.324119
+NIE ODRZUCAMY H0 – brak podstaw do stwierdzenia efektu miesiąca.
+
+======================================================================
+REGRESJA – EFEKT DNIA TYGODNIA
+======================================================================
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             Log_Return   R-squared:                       0.005
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     3.448
+Date:                Sat, 03 Oct 2026   Prob (F-statistic):            0.00809
+Time:                        08:44:59   Log-Likelihood:                 7569.6
+No. Observations:                2643   AIC:                        -1.513e+04
+Df Residuals:                    2638   BIC:                        -1.510e+04
+Df Model:                           4                                         
+Covariance Type:                  HAC                                         
+===================================================================================
+                      coef    std err          z      P>|z|      [0.025      0.975]
+-----------------------------------------------------------------------------------
+Intercept           0.0016      0.001      2.597      0.009       0.000       0.003
+C(weekday)[T.1]    -0.0006      0.001     -0.690      0.490      -0.002       0.001
+C(weekday)[T.2]    -0.0013      0.001     -1.562      0.118      -0.003       0.000
+C(weekday)[T.3]    -0.0019      0.001     -2.189      0.029      -0.004      -0.000
+C(weekday)[T.4]    -0.0027      0.001     -3.313      0.001      -0.004      -0.001
+==============================================================================
+Omnibus:                      553.648   Durbin-Watson:                   2.034
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             6789.516
+Skew:                          -0.630   Prob(JB):                         0.00
+Kurtosis:                      10.750   Cond. No.                         5.87
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 5 lags and without small sample correction
+
+======================================================================
+REGRESJA – EFEKT MIESIĄCA
+======================================================================
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             Log_Return   R-squared:                       0.005
+Model:                            OLS   Adj. R-squared:                  0.001
+Method:                 Least Squares   F-statistic:                     1.599
+Date:                Sat, 03 Oct 2026   Prob (F-statistic):             0.0924
+Time:                        08:44:59   Log-Likelihood:                 7569.8
+No. Observations:                2643   AIC:                        -1.512e+04
+Df Residuals:                    2631   BIC:                        -1.504e+04
+Df Model:                          11                                         
+Covariance Type:                  HAC                                         
+==================================================================================
+                     coef    std err          z      P>|z|      [0.025      0.975]
+----------------------------------------------------------------------------------
+Intercept          0.0010      0.001      1.296      0.195      -0.001       0.003
+C(month)[T.2]     -0.0018      0.001     -1.361      0.174      -0.004       0.001
+C(month)[T.3]     -0.0014      0.002     -0.904      0.366      -0.005       0.002
+C(month)[T.4]      0.0001      0.001      0.093      0.926      -0.002       0.003
+C(month)[T.5]     -0.0010      0.001     -0.935      0.350      -0.003       0.001
+C(month)[T.6]     -0.0008      0.001     -0.726      0.468      -0.003       0.001
+C(month)[T.7]    4.35e-05      0.001      0.044      0.965      -0.002       0.002
+C(month)[T.8]     -0.0018      0.001     -1.448      0.148      -0.004       0.001
+C(month)[T.9]     -0.0026      0.001     -2.455      0.014      -0.005      -0.001
+C(month)[T.10]    -0.0002      0.001     -0.158      0.874      -0.003       0.002
+C(month)[T.11]     0.0002      0.001      0.135      0.892      -0.002       0.003
+C(month)[T.12]     0.0008      0.001      0.751      0.453      -0.001       0.003
+==============================================================================
+Omnibus:                      538.855   Durbin-Watson:                   2.042
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             6604.079
+Skew:                          -0.602   Prob(JB):                         0.00
+Kurtosis:                      10.650   Cond. No.                         12.8
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 5 lags and without small sample correction
+
+======================================================================
+REGRESJA ŁĄCZNA – DZIEŃ + MIESIĄC
+======================================================================
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             Log_Return   R-squared:                       0.010
+Model:                            OLS   Adj. R-squared:                  0.004
+Method:                 Least Squares   F-statistic:                     2.032
+Date:                Sat, 03 Oct 2026   Prob (F-statistic):             0.0106
+Time:                        08:44:59   Log-Likelihood:                 7576.1
+No. Observations:                2643   AIC:                        -1.512e+04
+Df Residuals:                    2627   BIC:                        -1.503e+04
+Df Model:                          15                                         
+Covariance Type:                  HAC                                         
+===================================================================================
+                      coef    std err          z      P>|z|      [0.025      0.975]
+-----------------------------------------------------------------------------------
+Intercept           0.0023      0.001      2.436      0.015       0.000       0.004
+C(weekday)[T.1]    -0.0006      0.001     -0.713      0.476      -0.002       0.001
+C(weekday)[T.2]    -0.0013      0.001     -1.589      0.112      -0.003       0.000
+C(weekday)[T.3]    -0.0019      0.001     -2.216      0.027      -0.004      -0.000
+C(weekday)[T.4]    -0.0028      0.001     -3.330      0.001      -0.004      -0.001
+C(month)[T.2]      -0.0018      0.001     -1.373      0.170      -0.004       0.001
+C(month)[T.3]      -0.0014      0.002     -0.913      0.361      -0.005       0.002
+C(month)[T.4]       0.0001      0.001      0.095      0.925      -0.002       0.003
+C(month)[T.5]      -0.0011      0.001     -0.951      0.342      -0.003       0.001
+C(month)[T.6]      -0.0008      0.001     -0.747      0.455      -0.003       0.001
+C(month)[T.7]    3.863e-05      0.001      0.039      0.969      -0.002       0.002
+C(month)[T.8]      -0.0018      0.001     -1.455      0.146      -0.004       0.001
+C(month)[T.9]      -0.0026      0.001     -2.456      0.014      -0.005      -0.001
+C(month)[T.10]     -0.0002      0.001     -0.176      0.860      -0.003       0.002
+C(month)[T.11]      0.0002      0.001      0.138      0.890      -0.002       0.003
+C(month)[T.12]      0.0008      0.001      0.775      0.438      -0.001       0.003
+==============================================================================
+Omnibus:                      539.869   Durbin-Watson:                   2.043
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             6651.265
+Skew:                          -0.602   Prob(JB):                         0.00
+Kurtosis:                      10.678   Cond. No.                         13.7
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 5 lags and without small sample correction
+
+======================================================================
+PODSUMOWANIE TESTÓW
+======================================================================
+                           Test  Statystyka  p-value          Wniosek (alpha=0.05)
+                Ljung-Box lag 1    0.725141 0.394463 Brak podstaw do odrzucenia H0
+                Ljung-Box lag 5    7.073490 0.215232 Brak podstaw do odrzucenia H0
+               Ljung-Box lag 10   11.606675 0.312242 Brak podstaw do odrzucenia H0
+               Ljung-Box lag 20   23.263491 0.276043 Brak podstaw do odrzucenia H0
+               Ljung-Box lag 30   48.204610 0.018913                 Odrzucenie H0
+               Box-Pierce lag 1    0.724319 0.394731 Brak podstaw do odrzucenia H0
+               Box-Pierce lag 5    7.059149 0.216278 Brak podstaw do odrzucenia H0
+              Box-Pierce lag 10   11.575201 0.314492 Brak podstaw do odrzucenia H0
+              Box-Pierce lag 20   23.149739 0.281502 Brak podstaw do odrzucenia H0
+              Box-Pierce lag 30   47.849306 0.020523                 Odrzucenie H0
+                      Runs test    1.232011 0.217945 Brak podstaw do odrzucenia H0
+             Kolmogorov-Smirnov    0.045372 0.000036                 Odrzucenie H0
+                            ADF  -29.284914 0.000000                 Odrzucenie H0
+         ANOVA – dzień tygodnia    3.153886 0.013462                 Odrzucenie H0
+Kruskal-Wallis – dzień tygodnia   19.120875 0.000744                 Odrzucenie H0
+                ANOVA – miesiąc    1.175205 0.298743 Brak podstaw do odrzucenia H0
+       Kruskal-Wallis – miesiąc   12.544737 0.324119 Brak podstaw do odrzucenia H0
+
+======================================================================
+ZAPIS WYNIKÓW DO EXCEL
+======================================================================
+
+======================================================================
+ANALIZA ZAKOŃCZONA
+======================================================================
+
+Wyniki zapisano do pliku:
+analiza_WIG20_2016_2026.xlsx
+
+Wygenerowane wykresy:
+01_gestosc_rozkadu_WIG20.png
+02_ACF_WIG20.png
+03_QQ_WIG20.png
+04_efekt_dnia_tygodnia_WIG20.png
+05_efekt_miesiaca_WIG20.png

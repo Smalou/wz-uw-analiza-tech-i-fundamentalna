@@ -1,0 +1,398 @@
+<style>
+  .w-page { font-family: var(--font-anthropic-sans); display: flex; flex-direction: column; gap: var(--cds-gap-lg); font-variant-numeric: tabular-nums; }
+  .w-head { display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .w-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+  .w-lede { margin: 0; max-width: 72ch; color: var(--color-fg); line-height: 1.55; }
+  .w-meta { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+
+  .w-tabs { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); border-bottom: 1px solid var(--color-border-line); }
+  .w-tab { font: inherit; background: none; border: 0; border-bottom: 2px solid transparent; padding: var(--cds-pad-sm) var(--cds-pad-md); color: var(--color-fg-muted); cursor: pointer; margin-bottom: -1px; }
+  .w-tab:hover { color: var(--color-fg); }
+  .w-tab[aria-selected="true"] { color: var(--color-fg); border-bottom-color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+  .w-tab:focus-visible, .w-chip:focus-visible, .w-sel:focus-visible, .w-leg button:focus-visible, .w-th-btn:focus-visible { outline: 2px solid var(--cds-chart-categorical-1); outline-offset: 2px; }
+
+  .w-page [hidden] { display: none !important; }
+  .w-section { display: flex; flex-direction: column; gap: var(--cds-gap-md); }
+  .w-h2 { margin: var(--cds-gap-sm) 0 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+  .w-grid2 { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); }
+  .w-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+  .w-card-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: var(--cds-gap-sm); }
+  .w-card h3 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+  .w-note { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); line-height: 1.5; max-width: 80ch; }
+  .w-note b { font-weight: var(--cds-font-weight-medium); color: var(--color-fg); }
+
+  .w-kpis { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr)); }
+  .w-kpi { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+  .w-kpi-label { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .w-kpi-value { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.15; }
+  .w-kpi-sub { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+
+  .w-controls { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); align-items: center; }
+  .w-chip { font: inherit; font-size: var(--cds-font-size-caption); padding: 0.2rem 0.65rem; border-radius: 999px; border: 1px solid var(--color-border-line); background: transparent; color: var(--color-fg-muted); cursor: pointer; }
+  .w-chip:hover { color: var(--color-fg); }
+  .w-chip[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); border-color: var(--color-fg); }
+  .w-sel { font: inherit; font-size: var(--cds-font-size-caption); padding: 0.2rem 0.4rem; border-radius: var(--cds-radius); border: 1px solid var(--color-border-line); background: var(--color-panel); color: var(--color-fg); }
+  .w-range { display: flex; align-items: center; gap: var(--cds-gap-xs); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .w-range input { width: 7rem; }
+  .w-check { display: flex; align-items: center; gap: 0.3rem; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+
+  .w-leg { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); font-size: var(--cds-font-size-caption); }
+  .w-leg button, .w-leg span.w-leg-item { font: inherit; display: inline-flex; align-items: center; gap: 0.35rem; background: none; border: 0; padding: 0.1rem 0; color: var(--color-fg); cursor: pointer; }
+  .w-leg span.w-leg-item { cursor: default; }
+  .w-leg button[aria-pressed="false"] { color: var(--color-fg-muted); text-decoration: line-through; }
+  .w-leg button[aria-pressed="false"] .w-sw { opacity: .3; }
+  .w-sw { width: 0.7rem; height: 0.7rem; border-radius: 3px; display: inline-block; flex: none; }
+  .w-sw.w-ring { background: transparent !important; border: 2px solid var(--color-fg-muted); border-radius: 50%; }
+  .w-sw.w-dot { border-radius: 50%; }
+
+  .w-chart { position: relative; min-width: 0; }
+  .w-chart.dash-skeleton { min-height: 220px; }
+  .w-svg { display: block; overflow: visible; }
+  .w-grid { stroke: var(--cds-chart-grid); }
+  .w-axis { stroke: var(--cds-chart-axis); }
+  .w-ref { stroke: var(--cds-chart-reference); stroke-dasharray: 4 3; }
+  .w-zero { stroke: var(--cds-chart-baseline); }
+  .w-tick { fill: var(--color-fg-muted); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); }
+  .w-lbl { fill: var(--color-fg); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); }
+  .w-lbl-muted { fill: var(--color-fg-muted); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); }
+  .w-cell-lbl { fill: var(--color-fg); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); paint-order: stroke; stroke: var(--color-panel); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+  .w-rule { stroke: var(--color-fg-muted); stroke-width: 1; pointer-events: none; }
+  .w-tip { position: absolute; z-index: 5; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); min-width: 9rem; max-width: 18rem; display: flex; flex-direction: column; gap: 2px; }
+  .w-tip-head { color: var(--cds-text-secondary); margin-bottom: 2px; }
+  .w-tip-row { display: flex; align-items: center; gap: 0.4rem; }
+  .w-tip-row > span:nth-child(2), .w-tip-row > span:only-of-type { flex: 1; }
+  .w-tip-row b { font-weight: var(--cds-font-weight-medium); margin-left: auto; padding-left: 0.6rem; }
+  .w-fail { min-height: 200px; display: flex; align-items: center; justify-content: center; gap: 0.4rem; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .w-fail i { width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); display: inline-block; }
+
+  .w-table-wrap { overflow: auto; max-height: 30rem; }
+  .w-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); }
+  .w-table th, .w-table td { text-align: left; padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--color-border-line); vertical-align: middle; }
+  .w-table th { position: sticky; top: 0; background: var(--color-panel); color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); white-space: nowrap; }
+  .w-table td.num, .w-table th.num { text-align: right; }
+  .w-table tr.w-group td { color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); background: var(--cds-chart-reference-tint); }
+  .w-th-btn { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  .w-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.1rem 0.55rem; border-radius: 999px; font-size: var(--cds-font-size-caption); white-space: nowrap; border: 1px solid var(--color-border-line); }
+  .w-pill::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: var(--cds-chart-muted); }
+  .w-pill.is-rej { color: var(--color-fg); }
+  .w-pill.is-rej::before { background: var(--cds-chart-categorical-1); }
+  .w-pill.is-keep { color: var(--color-fg-muted); }
+
+  .w-stats { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .w-stats b { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+  [data-dash-source-state=empty] { color: transparent; }
+  @media (prefers-reduced-motion: no-preference) {
+    .w-section.is-in { animation: w-in var(--cds-dur-slow) var(--cds-ease-out); }
+    @keyframes w-in { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  }
+</style>
+
+<div class="w-page">
+  <header class="w-head">
+    <h1 class="w-title">WIG20 i sektory GPW 2016–2026</h1>
+    <p class="w-lede" id="takeaway">
+      Dzienne stopy zwrotu WIG20 <span class="t-ks">—</span> rozkładu normalnego (test K-S, p = <span data-source="wig20_tests" data-field="p_value" data-where="test=Kolmogorov-Smirnov">—</span>) i <span class="t-lb">—</span> autokorelacji do 20 sesji (Ljung-Box, p = <span data-source="wig20_tests" data-field="p_value" data-where="test=Ljung-Box lag 20">—</span>).
+      Efekt dnia tygodnia <span class="t-wd">—</span> (Kruskal-Wallis, p = <span data-source="wig20_tests" data-field="p_value" data-where="test=Kruskal-Wallis – dzień tygodnia">—</span>): poniedziałek średnio <span data-source="wig20_weekday" data-field="średnia" data-where="dzien=Poniedziałek">—</span>, piątek <span data-source="wig20_weekday" data-field="średnia" data-where="dzien=Piątek">—</span>.
+      Efekt miesiąca <span class="t-mo">—</span> (p = <span data-source="wig20_tests" data-field="p_value" data-where="test=Kruskal-Wallis – miesiąc">—</span>).
+      W fazach cyklu PKB istotnie różnią się stopy zwrotu sektorów: <span id="t-sectors" data-source="sector_phase_tests">—</span>.
+    </p>
+    <p class="w-meta">Notowania dzienne Stooq 04.01.2016–31.07.2026, dane makro Eurostat (PKB, HICP, bezrobocie). Poziom istotności α = 0,05. Wyniki skryptów „Analiza fundamentalna i techniczna 1.py” i „… 2.py”.</p>
+  </header>
+
+  <nav class="w-tabs" role="tablist" aria-label="Części analizy">
+    <button class="w-tab" role="tab" id="tab-przeglad" data-page="przeglad" aria-selected="true">Przegląd WIG20</button>
+    <button class="w-tab" role="tab" id="tab-rozklad" data-page="rozklad" aria-selected="false">Rozkład i losowość</button>
+    <button class="w-tab" role="tab" id="tab-kalendarz" data-page="kalendarz" aria-selected="false">Efekty kalendarzowe</button>
+    <button class="w-tab" role="tab" id="tab-sektory" data-page="sektory" aria-selected="false">Sektory a cykl koniunkturalny</button>
+  </nav>
+
+  <!-- ===================== PRZEGLĄD ===================== -->
+  <section class="w-section" id="przeglad" role="tabpanel" aria-labelledby="tab-przeglad">
+    <div class="w-kpis">
+      <div class="w-kpi">
+        <span class="w-kpi-label">Zmiana WIG20 w próbie</span>
+        <span class="w-kpi-value" data-source="wig20_change" data-field="zmiana" data-row="0">—</span>
+        <span class="w-kpi-sub"><span data-source="wig20_change" data-field="zamkniecie_od" data-row="0">—</span> → <span data-source="wig20_change" data-field="zamkniecie_do" data-row="0">—</span> pkt</span>
+      </div>
+      <div class="w-kpi">
+        <span class="w-kpi-label">Sesje (stopy zwrotu)</span>
+        <span class="w-kpi-value" data-source="wig20_stats" data-field="wartosc" data-where="statystyka=Liczba obserwacji">—</span>
+        <span class="w-kpi-sub">logarytmiczne, dzienne</span>
+      </div>
+      <div class="w-kpi">
+        <span class="w-kpi-label">Średnia dzienna stopa</span>
+        <span class="w-kpi-value" data-source="wig20_stats" data-field="wartosc" data-where="statystyka=Średnia">—</span>
+        <span class="w-kpi-sub">≈ <span data-source="wig20_annual" data-field="srednia_roczna" data-row="0">—</span> rocznie (×252)</span>
+      </div>
+      <div class="w-kpi">
+        <span class="w-kpi-label">Zmienność dzienna (σ)</span>
+        <span class="w-kpi-value" data-source="wig20_stats" data-field="wartosc" data-where="statystyka=Odchylenie standardowe">—</span>
+        <span class="w-kpi-sub">≈ <span data-source="wig20_annual" data-field="zmiennosc_roczna" data-row="0">—</span> rocznie (×√252)</span>
+      </div>
+      <div class="w-kpi">
+        <span class="w-kpi-label">Skośność</span>
+        <span class="w-kpi-value" data-source="wig20_stats" data-field="wartosc" data-where="statystyka=Skośność">—</span>
+        <span class="w-kpi-sub">lewy ogon: duże spadki</span>
+      </div>
+      <div class="w-kpi">
+        <span class="w-kpi-label">Kurtoza nadwyżkowa</span>
+        <span class="w-kpi-value" data-source="wig20_stats" data-field="wartosc" data-where="statystyka=Kurtoza nadwyżkowa">—</span>
+        <span class="w-kpi-sub">0 dla rozkładu normalnego</span>
+      </div>
+    </div>
+
+    <div class="w-card" id="card-price">
+      <div class="w-card-top">
+        <div>
+          <h3>Kurs zamknięcia WIG20</h3>
+          <p class="w-note">Punkty indeksu, sesje dzienne. Najedź na wykres, aby zobaczyć kurs i stopę zwrotu danego dnia.</p>
+        </div>
+        <div class="w-controls" id="price-range" role="group" aria-label="Zakres dat">
+          <button class="w-chip" data-from="2016-01-01" aria-pressed="true">Cały okres</button>
+          <button class="w-chip" data-from="2020-01-01" aria-pressed="false">Od 2020</button>
+          <button class="w-chip" data-from="2024-01-01" aria-pressed="false">Od 2024</button>
+          <button class="w-chip" data-from="last12" aria-pressed="false">Ostatnie 12 mies.</button>
+        </div>
+      </div>
+      <div class="w-chart" id="chart-price" data-source="wig20_daily"></div>
+    </div>
+
+    <div class="w-card" id="card-tests">
+      <div class="w-card-top">
+        <div>
+          <h3>Wyniki testów statystycznych</h3>
+          <p class="w-note">Każdy test przy α = 0,05. „Odrzucenie H0” oznacza, że dane przeczą hipotezie zerowej, np. normalności rozkładu albo braku autokorelacji. Kliknij nagłówek kolumny, aby posortować.</p>
+        </div>
+      </div>
+      <div class="w-table-wrap">
+        <table class="w-table" id="tbl-tests" data-source="wig20_tests" data-row-key="test">
+          <thead><tr>
+            <th data-field="grupa"><button class="w-th-btn" data-sort="grupa">Obszar</button></th>
+            <th data-field="test"><button class="w-th-btn" data-sort="test">Test</button></th>
+            <th data-field="statystyka" class="num"><button class="w-th-btn" data-sort="statystyka">Statystyka</button></th>
+            <th data-field="p_value" class="num"><button class="w-th-btn" data-sort="p_value">p-value</button></th>
+            <th data-field="wniosek"><button class="w-th-btn" data-sort="wniosek">Wniosek</button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ROZKŁAD ===================== -->
+  <section class="w-section" id="rozklad" role="tabpanel" aria-labelledby="tab-rozklad" hidden>
+    <div class="w-card" id="card-returns">
+      <h3>Dzienne logarytmiczne stopy zwrotu</h3>
+      <p class="w-note">ln(P<sub>t</sub> / P<sub>t−1</sub>). Okresy dużej zmienności grupują się w czasie (marzec 2020, luty–marzec 2022), mimo braku autokorelacji samych stóp. Linie przerywane to ±3σ.</p>
+      <div class="w-chart" id="chart-returns" data-source="wig20_daily"></div>
+    </div>
+
+    <div class="w-grid2">
+      <div class="w-card" id="card-hist">
+        <div class="w-card-top">
+          <div>
+            <h3>Histogram i rozkład normalny</h3>
+            <p class="w-note">Słupki: gęstość empiryczna. Linia: rozkład normalny o tej samej średniej i σ.</p>
+          </div>
+          <div class="w-controls">
+            <label class="w-range" for="bins">Przedziały <input type="range" id="bins" min="20" max="150" step="5" value="80"><span id="bins-val">80</span></label>
+            <label class="w-check" for="show-normal"><input type="checkbox" id="show-normal" checked> rozkład normalny</label>
+          </div>
+        </div>
+        <div class="w-stats">
+          <span>Sesje z |z| &gt; 3: <b data-source="wig20_tails" data-field="obserwowane" data-row="0">—</b></span>
+          <span>oczekiwane przy normalności: <b data-source="wig20_tails" data-field="oczekiwane_normalny" data-row="0">—</b></span>
+          <span>K-S p = <b data-source="wig20_tests" data-field="p_value" data-where="test=Kolmogorov-Smirnov">—</b></span>
+        </div>
+        <div class="w-chart" id="chart-hist" data-source="wig20_daily"></div>
+      </div>
+
+      <div class="w-card" id="card-qq">
+        <h3>Wykres kwantyl-kwantyl (Q-Q)</h3>
+        <p class="w-note">Standaryzowane stopy względem kwantyli N(0,1). Punkty odchodzące od przekątnej na końcach to grube ogony. Najedź na punkt, aby zobaczyć datę sesji.</p>
+        <div class="w-chart" id="chart-qq" data-source="wig20_daily"></div>
+      </div>
+    </div>
+
+    <div class="w-grid2">
+      <div class="w-card" id="card-acf">
+        <h3>Funkcja autokorelacji (ACF)</h3>
+        <p class="w-note">Opóźnienia 1–40 sesji. Pas to 95% przedział Bartletta; słupki poza pasem są wyróżnione.</p>
+        <div class="w-chart" id="chart-acf" data-source="wig20_acf"></div>
+      </div>
+      <div class="w-card" id="card-lb">
+        <h3>Ljung-Box i Box-Pierce: p-value</h3>
+        <p class="w-note">H0: brak autokorelacji do danego opóźnienia. Poniżej linii 0,05 odrzucamy H0 (tylko lag 30).</p>
+        <div class="w-leg" id="leg-lb"></div>
+        <div class="w-chart" id="chart-lb" data-source="wig20_ljungbox"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== KALENDARZ ===================== -->
+  <section class="w-section" id="kalendarz" role="tabpanel" aria-labelledby="tab-kalendarz" hidden>
+    <div class="w-controls" role="group" aria-label="Miara" id="cal-measure">
+      <button class="w-chip" data-m="średnia" aria-pressed="true">Średnia ± 95% CI</button>
+      <button class="w-chip" data-m="mediana" aria-pressed="false">Mediana</button>
+    </div>
+    <div class="w-grid2">
+      <div class="w-card" id="card-weekday">
+        <h3>Efekt dnia tygodnia</h3>
+        <div class="w-stats">
+          <span>ANOVA p = <b data-source="wig20_tests" data-field="p_value" data-where="test=ANOVA – dzień tygodnia">—</b></span>
+          <span>Kruskal-Wallis p = <b data-source="wig20_tests" data-field="p_value" data-where="test=Kruskal-Wallis – dzień tygodnia">—</b></span>
+        </div>
+        <p class="w-note">Dzienna log-stopa WIG20 według dnia sesji. Średnie maleją z każdym dniem tygodnia.</p>
+        <div class="w-chart" id="chart-weekday" data-source="wig20_weekday"></div>
+      </div>
+      <div class="w-card" id="card-month">
+        <h3>Efekt miesiąca roku</h3>
+        <div class="w-stats">
+          <span>ANOVA p = <b data-source="wig20_tests" data-field="p_value" data-where="test=ANOVA – miesiąc">—</b></span>
+          <span>Kruskal-Wallis p = <b data-source="wig20_tests" data-field="p_value" data-where="test=Kruskal-Wallis – miesiąc">—</b></span>
+        </div>
+        <p class="w-note">Dzienna log-stopa WIG20 według miesiąca. Przedziały ufności w większości obejmują zero.</p>
+        <div class="w-chart" id="chart-month" data-source="wig20_month"></div>
+      </div>
+    </div>
+
+    <div class="w-card" id="card-reg">
+      <div class="w-card-top">
+        <div>
+          <h3>Regresja kalendarzowa (OLS, błędy HAC)</h3>
+          <p class="w-note">Współczynnik to różnica średniej stopy względem kategorii bazowej (<b id="reg-base">poniedziałek</b>), z 95% przedziałem ufności. Wyróżnione są współczynniki istotne przy p &lt; 0,05.</p>
+        </div>
+        <label class="w-range" for="reg-model">Model
+          <select class="w-sel" id="reg-model">
+            <option value="Dzień tygodnia">Dzień tygodnia</option>
+            <option value="Miesiąc">Miesiąc</option>
+            <option value="Łączna">Łączny (dzień + miesiąc)</option>
+          </select>
+        </label>
+      </div>
+      <div class="w-stats" id="reg-intercept"><span>Stała (<span id="reg-intercept-name">poniedziałek</span>): <b id="reg-intercept-val" data-source="wig20_regression" data-field="coef" data-where="model=Dzień tygodnia&amp;term=Intercept">—</b></span></div>
+      <div class="w-chart" id="chart-reg" data-source="wig20_regression"></div>
+    </div>
+  </section>
+
+  <!-- ===================== SEKTORY ===================== -->
+  <section class="w-section" id="sektory" role="tabpanel" aria-labelledby="tab-sektory" hidden>
+    <div class="w-card" id="card-sector-prices">
+      <div class="w-card-top">
+        <div>
+          <h3>Indeksy sektorowe, początek okresu = 100</h3>
+          <p class="w-note">Każdy indeks przeliczony od pierwszej sesji wybranego okresu. WIG-LEKI jest notowany od 02.01.2017. Kliknij nazwę w legendzie, aby ukryć serię.</p>
+        </div>
+        <div class="w-controls" id="sector-range" role="group" aria-label="Początek okresu">
+          <button class="w-chip" data-from="2016-01-01" aria-pressed="false">Od 2016</button>
+          <button class="w-chip" data-from="2017-01-01" aria-pressed="true">Od 2017</button>
+          <button class="w-chip" data-from="2020-01-01" aria-pressed="false">Od 2020</button>
+          <button class="w-chip" data-from="2023-01-01" aria-pressed="false">Od 2023</button>
+        </div>
+      </div>
+      <div class="w-leg" id="leg-sector-prices"></div>
+      <div class="w-chart" id="chart-sector-prices" data-source="sector_prices"></div>
+    </div>
+
+    <div class="w-card" id="card-cycle">
+      <h3>Fazy cyklu koniunkturalnego wg PKB</h3>
+      <p class="w-note">Realny PKB Polski, zmiana kw/kw (sa), Eurostat. Spadek: pojedynczy ujemny kwartał; ożywienie: pierwszy nieujemny po spadku; spowolnienie: wzrost niższy niż kwartał wcześniej; ekspansja: pozostałe. Recesja (dwa ujemne kwartały z rzędu) nie wystąpiła.</p>
+      <div class="w-leg" id="leg-cycle"></div>
+      <div class="w-chart" id="chart-cycle" data-source="business_cycle"></div>
+    </div>
+
+    <div class="w-grid2">
+      <div class="w-card" id="card-phase-heat">
+        <div class="w-card-top">
+          <div>
+            <h3>Sektory w fazach cyklu</h3>
+            <p class="w-note">Miesięczne log-stopy zwrotu. Najedź na komórkę, aby zobaczyć liczbę miesięcy.</p>
+          </div>
+          <label class="w-range" for="phase-metric">Miara
+            <select class="w-sel" id="phase-metric">
+              <option value="srednia">Średnia</option>
+              <option value="mediana">Mediana</option>
+              <option value="skumulowana">Suma (skumulowana)</option>
+              <option value="odchylenie">Odchylenie std.</option>
+            </select>
+          </label>
+        </div>
+        <div class="w-chart" id="chart-phase-heat" data-source="phase_stats"></div>
+      </div>
+      <div class="w-card" id="card-phase-tests">
+        <h3>Czy stopy różnią się między fazami?</h3>
+        <p class="w-note">Kruskal-Wallis (nieparametryczny) i ANOVA, osobno dla każdego sektora.</p>
+        <div class="w-table-wrap">
+          <table class="w-table" id="tbl-phase-tests" data-source="sector_phase_tests" data-row-key="sektor">
+            <thead><tr>
+              <th data-field="sektor">Sektor</th>
+              <th data-field="H" class="num">H</th>
+              <th data-field="kw_p" class="num">p (K-W)</th>
+              <th data-field="F" class="num">F</th>
+              <th data-field="anova_p" class="num">p (ANOVA)</th>
+              <th data-field="wniosek_kw">Wniosek (K-W)</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-grid2">
+      <div class="w-card" id="card-corr-matrix">
+        <h3>Macierz korelacji Pearsona</h3>
+        <p class="w-note">Miesięczne stopy sektorów i zmienne makro, 2016–2026.</p>
+        <div class="w-chart" id="chart-corr-matrix" data-source="sector_corr_matrix"></div>
+      </div>
+      <div class="w-card" id="card-macro-corr">
+        <div class="w-card-top">
+          <div>
+            <h3>Korelacja sektorów z makro</h3>
+            <p class="w-note">Pełne kółko: Pearson, puste: Spearman. Pogrubione i podpisane, gdy p &lt; 0,05.</p>
+          </div>
+          <label class="w-range" for="macro-var">Zmienna
+            <select class="w-sel" id="macro-var">
+              <option value="GDP_growth">PKB kw/kw</option>
+              <option value="Inflation_YoY">Inflacja HICP r/r</option>
+              <option value="Unemployment">Stopa bezrobocia</option>
+            </select>
+          </label>
+        </div>
+        <div class="w-leg"><span class="w-leg-item"><span class="w-sw w-dot" style="background: var(--color-fg)"></span>Pearson</span><span class="w-leg-item"><span class="w-sw w-ring"></span>Spearman</span></div>
+        <div class="w-chart" id="chart-macro-corr" data-source="sector_macro_corr"></div>
+      </div>
+    </div>
+
+    <div class="w-card" id="card-rolling">
+      <div class="w-card-top">
+        <div>
+          <h3>Korelacja krocząca sektorów z makro</h3>
+          <p class="w-note">Korelacja Pearsona miesięcznych stóp ze zmienną makro w oknie kroczącym. Pokazuje, że związek nie jest stały w czasie.</p>
+        </div>
+        <div class="w-controls">
+          <label class="w-range" for="roll-var">Zmienna
+            <select class="w-sel" id="roll-var">
+              <option value="GDP_growth">PKB kw/kw</option>
+              <option value="Inflation_YoY">Inflacja HICP r/r</option>
+              <option value="Unemployment">Stopa bezrobocia</option>
+            </select>
+          </label>
+          <label class="w-range" for="roll-win">Okno
+            <select class="w-sel" id="roll-win">
+              <option value="12">12 mies.</option>
+              <option value="24" selected>24 mies.</option>
+              <option value="36">36 mies.</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="w-leg" id="leg-rolling"></div>
+      <div class="w-chart" id="chart-rolling" data-source="rolling_corr"></div>
+    </div>
+  </section>
+</div>
+
+<script src="core.js"></script>
+<script src="app.js"></script>
